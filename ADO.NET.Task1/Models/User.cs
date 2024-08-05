@@ -9,6 +9,14 @@ public class User
     {
         Name = name;
         Email = email;
+    }
+    public User()
+    {
+            
+    }
 
+    public override string ToString()
+    {
+        return $"Id: {Id}, Name: {Name}, Email: {Email}";
     }
 }

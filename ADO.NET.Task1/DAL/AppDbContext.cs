@@ -3,27 +3,51 @@ using System.Data;
 
 namespace ADO.NET.Task1.DAL;
 
-public class AppDbContext
+public static class AppDbContext
 {
     static readonly string connectionString = "server=Ruhel\\SQLEXPRESS;database=ADOTask1;trusted_connection=true;integrated security=true";
-    SqlConnection connection = new SqlConnection(connectionString);
+    static SqlConnection connection = new SqlConnection(connectionString);
 
-    public int NonQueryExecute(string command)
+    public static int NonQueryExecute(string command)
     {
-        connection.Open();
-        SqlCommand cmd = new SqlCommand(command, connection);
-        int result = cmd.ExecuteNonQuery();
-        connection.Close();
+        int result = 0;
+        try
+        {
+            connection.Open();
+            SqlCommand cmd = new SqlCommand(command, connection);
+            result = cmd.ExecuteNonQuery();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
         return result;
     }
-    public DataTable QueryExecute(string query)
+    public static DataTable QueryExecute(string query)
     {
-        connection.Open();
-        SqlDataAdapter adapter = new SqlDataAdapter(query,connection);
-
         DataTable dt = new DataTable();
-        adapter.Fill(dt);
-        connection.Close();
+
+        try
+        {
+            connection.Open();
+            SqlDataAdapter adapter = new SqlDataAdapter(query, connection);
+
+            adapter.Fill(dt);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            connection.Close();
+        }
+
         return dt;
     }
 
